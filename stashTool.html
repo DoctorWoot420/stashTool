@@ -1,0 +1,91 @@
+<html>
+<head>
+  <link rel="stylesheet" href="resources/style.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+	<script src="resources/jsDataFiles/characterData.js"></script>
+	<script src="resources/jsDataFiles/itemStatCodes.js"></script>
+	<script src="resources/lib.js"></script>
+	<script src="resources/BootstrapSelect/js/plugins.js"></script>
+</head>
+<body>
+	<div id="dateTimeGenerated">Character Data Last Updated<br /><span id="dateTimeReplace">3/3/3030 4:20</span></div>
+	<div class="u-full-width" id="topbar">
+    </div>
+	<div class="u-full-width" id="banner">
+    </div>
+	<h1>Resurgence Stash Search Tool</h1>
+	<div id="oldDataAlert" style="display:none;">Your character data is more than 1 hour old.  You might need to refresh it by running the file <strong>buildCharacterData.vbs</strong> in the stashTool folder.</div>
+	<div id="searchForm">
+		<label for="keywordInput">Keyword Search:</label> <input class="padr-15" type="text" id="keywordInput">
+		<label for="itemType">Type:</label>
+		<select class="padr-15" id="itemType">
+			<option value="none">Select Type</option>
+			<option value="Jewel">Jewel</option>
+			<option value="Amulet">Amulet</option>
+			<option value="Ring">Ring</option>
+		</select>
+		<label for="itemQuality">Quality:</label>
+		<select class="padr-15" id="itemQuality">
+			<option value="none">Select Quality</option>
+			<option value="Normal">Normal</option>
+			<option value="Magic">Magic</option>
+			<option value="Rare">Rare</option>
+			<option value="Unique">Unique</option>
+			<option value="Set">Set</option>
+			<option value="Crafted">Crafted</option>
+		</select>
+		<button onclick="displaySearchResults()" class="searchButton">Search</button>
+		<div id="searchFormBot">
+			<label for="statName">Filter by Stat:</label>
+			<div class="dropdown">
+			  <button onclick="showStatDropdown()" class="dropbtn">Select a Stat</button>
+			  <div id="statDropdown" class="dropdown-content">
+				<input type="text" placeholder="Search.." id="statName" onkeyup="filterFunction()">
+			  </div>
+			</div>
+			<label for="statMin">Min Value:</label> <input  class="padr-15" type="text" id="statMin"></select>
+			<label for="statMax">Max Value:</label> <input  class="padr-15" type="text" id="statMax"></select>
+			<button id="addStatButton">Add More Stats</button>
+			<div id="filterContainer">
+				<span id="savedFilterLabel" style="display:none;">Stat Filters:</span>
+			</div>
+		</div>
+	</div>
+	<div class="messageContainer">
+		<div id="searchedText" style="display:none;">
+			Searching for <span id="searchTextString"></span>
+		</div>
+		<div id="resultCount" style="display:none;">
+			Found <span id="resultString"></span> Results
+		</div>
+	</div>
+	<table id="resultsTable" class="table table-dark">
+		<thead>
+			<tr>
+				<th scope="col">Account</th>
+				<th scope="col">Character</th>
+				<th scope="col">Item Name</th>
+				<th scope="col">Item Type</th>
+				<th scope="col">Item Level</th>
+				<th scope="col">Item Stats</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<th scope="row">DocWoot2</th>
+				<td>Omegatoke</td>
+				<td>The Unsearched Item</td>
+				<td>Dank</td>
+				<td>99</td>
+				<td>
+					Smoke Resistance: 420%<br />
+					Adds 6.9 rips per second
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<div id="specialOutput"></div>
+</body>
+</html>

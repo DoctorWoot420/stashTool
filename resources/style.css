@@ -1,0 +1,231 @@
+/* General Elements - Copied From Resurgence Website */
+	div#topbar, div#footer {
+		width: 1024px;
+		height: 81px;
+		margin:0px auto;
+		background-image: url(images/topbar.png);
+		background-repeat: no-repeat;
+		z-index: 15 !important;
+		position:relative;
+	}
+	div#banner {
+		width: 1024px;
+		height: 320px;
+		margin:-62px auto 0px;
+		background-image: url(images/banner.png);
+		background-repeat: no-repeat;
+		z-index: 5 !important;
+		position:relative;
+	}
+	@font-face {
+	  font-family:"Exocet Light";
+	  src:url("fonts/EXL_____.eot?") format("eot"),url("fonts/EXL_____.woff") format("woff"),url("fonts/EXL_____.ttf") format("truetype"),url("fonts/EXL_____.svg#ExocetLight") format("svg");
+	  font-weight:normal;
+	  font-style:normal;
+	}
+
+/* General Elements */
+	html body {
+		background-color:#000000;
+		color:#ffffff;
+		width:96%;
+		margin:0px auto;
+	}
+	h1 {
+		font-family: 'Exocet Light';
+		font-weight: 800;
+		font-size:5.0rem;
+		text-align:center;
+		width:100%;
+	}
+	.padr-15 {
+		margin-right:15px;
+	}
+	#dateTimeGenerated {
+		position:absolute;
+		top:5px;
+		right:5px;
+		text-align:right;
+		font-size:12px;
+		z-index:20;
+	}
+	#oldDataAlert {
+		color:red;
+		text-align:center;
+		padding:0px 0px 10px;
+	}
+
+/* Search Form */
+	#searchForm {
+		margin:0px auto;
+		text-align:center;
+	}
+	#searchFormBot {
+		margin-top:10px;
+	}
+	label, #savedFilterLabel {
+		font-family: 'Exocet Light';
+		font-weight: 800;
+	}
+	.searchButton, #addStatButton {
+		color:#ffffff;
+		background-color:#111 !important;
+		border: 1px solid #baa76a;
+	}
+	.searchButton {
+		width:250px;
+		margin-right:20px;
+	}
+	input, select {
+		margin-right:15px;
+		padding-left:5px;
+		height:24px;
+		border: 1px solid #baa76a;
+	}
+	#statMin, #statMax {
+		width:50px;
+	}
+	.messageContainer {
+		width:100%;
+		margin:0px auto 5px;
+		height:30px;
+		line-height:30px;
+		font-size:20px;
+		padding-bottom:5px;
+	}
+	.criteriaText {
+		padding-right:10px;
+	}
+	#searchedText {
+		text-align:left;
+		float:left;
+		width:50%;
+	}
+	#resultCount {
+		text-align:right;
+		float:right;
+		width:50%;
+	}
+	#searchTextString {
+		padding-left:10px;
+	}
+	#filterContainer {
+		width:42.69%;
+		margin:10px auto 0px;
+		text-align:left;
+	}
+	.savedFilter {
+		background-color:#111;
+		border: 1px solid #baa76a;
+		margin-left:10px;
+		padding:3px;
+		cursor: pointer;
+	}
+	.removeLink {
+		border: 1px solid #baa76a;
+		padding-left:5px;
+		padding:3px;
+	}
+
+/* Search Results */
+	.table-dark {
+		background-color:#111 !important;
+		-webkit-box-shadow: 0px 0px 3px 0px #baa76a;
+	}
+	.table-dark td, .table-dark th, .table-dark thead th {
+		border-color: #baa76a !important;
+	}
+	.table td, .table th {
+		border-top: 1px solid #baa76a;
+	}
+	/* Colors for Item Types */
+	.normal {
+		color: white;
+	}
+	.magic {
+		color: blue;
+	}
+	.rare {
+		color: yellow;
+	}
+	.unique {
+		color: brown;
+	}
+	.set {
+		color: green;
+	}
+	.crafted {
+		color: orange;
+	}
+	
+
+/* CSS from sample filter dropdown here
+https://www.w3schools.com/howto/howto_js_filter_dropdown.asp  */
+
+	/* Dropdown Button */
+	.dropbtn {
+	  background-color: #ffffff;
+	  color: black;
+	  font-size: 16px;
+	  width:150px;
+	  border: none;
+	  cursor: pointer;
+	  text-align:left;
+	  padding-left:5px;
+	}
+
+	/* The search field */
+	#myInput {
+	  box-sizing: border-box;
+	  background-image: url('searchicon.png');
+	  background-position: 14px 12px;
+	  background-repeat: no-repeat;
+	  font-size: 16px;
+	  padding: 14px 20px 12px 45px;
+	  border: none;
+	  border-bottom: 1px solid #ddd;
+	}
+
+	/* The search field when it gets focus/clicked on */
+	#myInput:focus {outline: 3px solid #ddd;}
+
+	/* The container <div> - needed to position the dropdown content */
+	.dropdown {
+	  position: relative;
+	  display: inline-block;
+	  height:24px;
+	  line-height:24px;
+	  width:150px;
+	  margin-right:15px;
+	}
+
+	/* Dropdown Content (Hidden by Default) */
+	.dropdown-content {
+	  display: none;
+	  position: absolute;
+	  background-color: #f6f6f6;
+	  min-width: 230px;
+	  border: 1px solid #ddd;
+	  z-index: 1;
+	  color: black;
+	  max-height:420px;
+	  overflow:auto;
+	  text-align:left;
+	}
+
+	/* Links inside the dropdown */
+	.dropdown-content a {
+	  color: black;
+	  padding: 12px 16px;
+	  text-decoration: none;
+	  display: block;
+	}
+
+	/* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
+	.show {display:block;}
+
+	#statName {
+		width:230px;
+	}
+
+

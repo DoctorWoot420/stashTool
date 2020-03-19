@@ -152,12 +152,13 @@ function getSearchResults(criteriaArr){
 			var criteriaJson = JSON.stringify(criteriaArr);
 			var criteriaResults = JSON.parse(criteriaJson);
 			var criteriaNum;
+			var statCriteriaNum = 'undefined';
 			//lazy copy paste to get startArrNum
 			for (criteriaNum = 0; criteriaNum < criteriaResults.length; criteriaNum++) {
 				switch(criteriaResults[criteriaNum].criteriaName) {
 					case 'Stats':
-					//For stats we could have multiple stats to check against.  We assume that we have a match on everything, until one of the checks goes wrong below.  Then just abort the loop and move to next item.
-					var statCriteriaNum = criteriaNum;
+						//For stats we could have multiple stats to check against.  We assume that we have a match on everything, until one of the checks goes wrong below.  Then just abort the loop and move to next item.
+						statCriteriaNum = criteriaNum;
 					break;
 				}
 			}
@@ -193,8 +194,8 @@ function getSearchResults(criteriaArr){
 						//Now check if we have stat criteria to check this stat against.
 
 						var statArrNum;
-						if(statCriteriaNum) {
-							console.log(criteriaResults[statCriteriaNum]);
+						if(statCriteriaNum !== 'undefined') {
+							//console.log(criteriaResults[statCriteriaNum]);
 							for(statArrNum = 0; statArrNum < criteriaResults[statCriteriaNum].value.length; statArrNum++) {
 								//console.log(criteriaResults[statCriteriaNum].value[statArrNum]);
 								//console.log(itemObj[itemAttr][statNum]);
@@ -227,16 +228,12 @@ function getSearchResults(criteriaArr){
 						}	
 						
 					}
-					if(statCriteriaNum) {
+					if(statCriteriaNum !== 'undefined') {
 						//Now check each of the stats to make sure we have match = true, otherwise stats is match false
 						setToFalse = false;
-						console.log('criteria before false check');
-						console.log(criteriaResults);
 						$.each( criteriaResults[statCriteriaNum].value, function( key, value ) {
-							console.log('testing for falses');
 							//for each stat check the match status
 							if(value[3] !== true) {
-								console.log('setting to false');
 								setToFalse = true;
 							}
 						});
@@ -244,7 +241,7 @@ function getSearchResults(criteriaArr){
 							criteriaResults[statCriteriaNum].match = false;	
 						}else{
 							criteriaResults[statCriteriaNum].match = true;	
-							console.log('stats checks have matched!');
+							//console.log('stats checks have matched!');
 							console.log(itemObj[itemAttr]);
 						}
 					}

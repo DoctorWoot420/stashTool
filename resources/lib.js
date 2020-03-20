@@ -140,10 +140,14 @@ function getSearchResults(criteriaArr){
 			var itemType = cleanseText(charDataObj[itemObjName].type);
 			var itemQuality = charDataObj[itemObjName].quality;
 			var itemLevel = charDataObj[itemObjName].iLevel;
+			if(typeof(charDataObj[itemObjName].defense) !== 'undefined') {
+				var itemDefense = charDataObj[itemObjName].defense;
+				itemDefenseHtml = '<strong>Defense</strong>&nbsp;&nbsp;'+itemDefense+'<br />';
+			}
 			
 			//We're going to just check each attribute and look for our keyword.
 			//Create a formatted string of all item stats with line breaks while we go
-			var itemStatsString = '';
+			var itemStatsString = itemDefenseHtml;
 			var statsStringsToSearch = '';
 			//Keywords to search starts with itemName+itemType, gets stat names/vals injected below
 			var keywordStringToSearch = itemName+itemType;

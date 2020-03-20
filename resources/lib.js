@@ -6,7 +6,7 @@ $( document ).ready(function() {
 	//console.log(statCodeArr);
 	var statListHtml = '';
 	for (var i=0;i<statCodeArr.length;i++){
-		statListHtml += '<a class="statValue" onclick="setFilterValue(\''+ statCodeArr[i] + '\')" href="#">'+ statCodeArr[i] + '</a>';
+		statListHtml += '<a class="statValue" onclick="setFilterValue(\''+ statCodeArr[i].modifiedName + '\')" href="#">'+ statCodeArr[i].modifiedName + '</a>';
 	}
 	$(statListHtml).insertAfter( "#statName" );
 	
@@ -141,11 +141,13 @@ function getSearchResults(criteriaArr){
 			var itemQuality = charDataObj[itemObjName].quality;
 			var itemLevel = charDataObj[itemObjName].iLevel;
 			var itemDefense = '';
+			var itemDefenseHtml = '';
 			if(typeof(charDataObj[itemObjName].defense) !== 'undefined') {
 				itemDefense = charDataObj[itemObjName].defense;
 				itemDefenseHtml = '<strong>Defense</strong>&nbsp;&nbsp;'+itemDefense+'<br />';
 			}
 			var itemSockets = '';
+			var socketsHtml = ''
 			if(typeof(charDataObj[itemObjName].sockets) !== 'undefined') {
 				itemSockets = charDataObj[itemObjName].sockets;
 			}
@@ -196,7 +198,7 @@ function getSearchResults(criteriaArr){
 									itemObj[itemAttr][statNum].value = '';
 								}
 								statsStringsToSearch = statsStringsToSearch + itemObj[itemAttr][statNum].name + itemObj[itemAttr][statNum].value;
-								itemStatsString = itemStatsString+'<strong>'+itemObj[itemAttr][statNum].name+':</strong>&nbsp;&nbsp;'+itemObj[itemAttr][statNum].value+minMaxStr+'<br />';
+								itemStatsString = itemStatsString+'<strong>'+getModifiedStatName(itemObj[itemAttr][statNum].name)+':</strong>&nbsp;&nbsp;'+itemObj[itemAttr][statNum].value+minMaxStr+'<br />';
 							}
 						}
 						
@@ -208,7 +210,8 @@ function getSearchResults(criteriaArr){
 							for(statArrNum = 0; statArrNum < criteriaResults[statCriteriaNum].value.length; statArrNum++) {
 								//console.log(criteriaResults[statCriteriaNum].value[statArrNum]);
 								//console.log(itemObj[itemAttr][statNum]);
-								if(typeof itemObj[itemAttr][statNum].name !== 'undefined' && criteriaResults[statCriteriaNum].value[statArrNum][0].toLowerCase() == itemObj[itemAttr][statNum].name.toLowerCase()) {
+								var rawStatName = getRawStatName(criteriaResults[statCriteriaNum].value[statArrNum][0]);
+								if(typeof itemObj[itemAttr][statNum].name !== 'undefined' && rawStatName.toLowerCase() == itemObj[itemAttr][statNum].name.toLowerCase()) {
 									//console.log('Matched this item on '+criteriaResults[statCriteriaNum].criteriaName+' criteria');
 									//console.log(criteriaResults[statCriteriaNum].value[statArrNum][1]);
 									//Now we've assumed it's a match, but need to check the min/max value criteria if present.  Let's just loop it again and check, then set match to false if needed
@@ -219,7 +222,7 @@ function getSearchResults(criteriaArr){
 											//console.log('Within parameters, we have a Stat Min match');
 											//console.log(criteriaResults);
 										}else{
-											console.log('Failed Min stat match.  criteria was('+criteriaResults[statCriteriaNum].value[statArrNum][1]+') and value was ('+itemObj[itemAttr][statNum].value+')');
+											//console.log('Failed Min stat match.  criteria was('+criteriaResults[statCriteriaNum].value[statArrNum][1]+') and value was ('+itemObj[itemAttr][statNum].value+')');
 											criteriaResults[statCriteriaNum].value[statArrNum][3] = false;
 										}
 									}
@@ -228,7 +231,7 @@ function getSearchResults(criteriaArr){
 										if(criteriaResults[statCriteriaNum].value[statArrNum][2] >=  itemObj[itemAttr][statNum].value) {
 											//console.log('Within parameters, we have a Stat Max match');
 										}else{
-											console.log('Failed Max stat match.  criteria was('+criteriaResults[statCriteriaNum].value[statArrNum][2]+') and value was ('+itemObj[itemAttr][statNum].value+')');
+											//console.log('Failed Max stat match.  criteria was('+criteriaResults[statCriteriaNum].value[statArrNum][2]+') and value was ('+itemObj[itemAttr][statNum].value+')');
 											criteriaResults[statCriteriaNum].value[statArrNum][3] = false;
 										}
 									}
@@ -251,7 +254,7 @@ function getSearchResults(criteriaArr){
 						}else{
 							criteriaResults[statCriteriaNum].match = true;	
 							//console.log('stats checks have matched!');
-							console.log(itemObj[itemAttr]);
+							//console.log(itemObj[itemAttr]);
 						}
 					}
 					
@@ -259,9 +262,7 @@ function getSearchResults(criteriaArr){
 				}else if(itemAttr == 'socketed') {
 					//Show a list of just the socketed item names.
 					if(itemSockets) {
-						var socketsHtml = '<strong>Sockets:</strong> '+itemSockets+'<br />';
-					}else{
-						var socketsHtml = ''
+						socketsHtml = '<strong>Sockets:</strong> '+itemSockets+'<br />';
 					}
 					var soscketsStringsToSearch = '';
 					for (const socketNum in itemObj[itemAttr])  {
@@ -297,7 +298,7 @@ function getSearchResults(criteriaArr){
 						console.log('Comparing for type ('+criteriaResults[criteriaNum].value+')   vs ('+itemType+')');
 						if(itemType.toLowerCase().indexOf(' '+criteriaResults[criteriaNum].value.toLowerCase()) !== -1) {
 							criteriaResults[criteriaNum].match = true;
-							console.log('Matched this item on '+criteriaResults[criteriaNum].criteriaName+' criteria');
+							//console.log('Matched this item on '+criteriaResults[criteriaNum].criteriaName+' criteria');
 							//console.log(criteriaResults);
 						}
 					break;
@@ -344,6 +345,29 @@ function getSearchResults(criteriaArr){
 	$('#resultString').html(searchResults.length);
 	$('#resultCount').attr( "style", "display: block !important;" );
 	return searchResults;
+}
+
+function getRawStatName(modifiedName) {
+	//This function loops all stats in itemStatCodes.js to find a modifiedName, and gives back a rawStateName
+	let statCodeArr = getStatCodeArr();
+	var statRow = 0;
+	for (statRow = 0; statRow < statCodeArr.length; statRow++) {
+		if(modifiedName == statCodeArr[statRow].modifiedName) {
+			return statCodeArr[statRow].rawStatName;
+		}
+	}
+	return modifiedName;
+}
+function getModifiedStatName(rawStatName) {
+	//This function loops all stats in itemStatCodes.js to find a rawStateName, and gives back a modifiedName
+	let statCodeArr = getStatCodeArr();
+	var statRow = 0;
+	for (statRow = 0; statRow < statCodeArr.length; statRow++) {
+		if(rawStatName == statCodeArr[statRow].rawStatName) {
+			return statCodeArr[statRow].modifiedName;
+		}
+	}
+	return rawStatName;
 }
 
 function addToStatfilters() {
@@ -468,12 +492,12 @@ function outputAllItemStatsToConsole() {
 					
 					for (const statNum in itemObj[itemAttr])  {
 						if(typeof(itemObj[itemAttr][statNum].name) !== 'undefined') {
-							console.log('check for name  "'+itemObj[itemAttr][statNum].name+'"');
-							console.log(itemStatArr);
+							//console.log('check for name  "'+itemObj[itemAttr][statNum].name+'"');
+							//console.log(itemStatArr);
 							if(jQuery.inArray( '"'+itemObj[itemAttr][statNum].name+'"', itemStatArr ) !== -1) {
-								console.log('already in arr');
+								//console.log('already in arr');
 							}else{
-								console.log('pushed new val');
+								//console.log('pushed new val');
 								itemStatArr.push('"'+itemObj[itemAttr][statNum].name+'"');
 							}
 						}

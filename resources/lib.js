@@ -87,7 +87,7 @@ function displaySearchResults() {
 	var searchResults = getSearchResults(criteriaArr);
 	$('#resultsTable').find("tr:gt(0)").remove();
 	for (i = 0; i < searchResults.length; i++) {
-		$('#resultsTable').append('<tr><th scope="row">'+searchResults[i].accountName+'</th><td>'+searchResults[i].charName+'</td><td>'+searchResults[i].itemName+'</td><td>'+searchResults[i].itemType+searchResults[i].qualityStr+'</td><td>'+searchResults[i].itemLevel+'</td><td>'+searchResults[i].itemStatsString+'</td></tr>');
+		$('#resultsTable').append('<tr><th scope="row">'+searchResults[i].accountName+'</th><td>'+searchResults[i].charName+'</td><td>'+searchResults[i].itemName+'</td><td>'+searchResults[i].itemType+searchResults[i].qualityStr+'</td><td>'+searchResults[i].itemLevel+'</td><td>'+searchResults[i].itemStatsString+'</td><td>'+searchResults[i].socketsHtml+'</td></tr>');
 	}
 	
 }
@@ -140,9 +140,14 @@ function getSearchResults(criteriaArr){
 			var itemType = cleanseText(charDataObj[itemObjName].type);
 			var itemQuality = charDataObj[itemObjName].quality;
 			var itemLevel = charDataObj[itemObjName].iLevel;
+			var itemDefense = '';
 			if(typeof(charDataObj[itemObjName].defense) !== 'undefined') {
-				var itemDefense = charDataObj[itemObjName].defense;
+				itemDefense = charDataObj[itemObjName].defense;
 				itemDefenseHtml = '<strong>Defense</strong>&nbsp;&nbsp;'+itemDefense+'<br />';
+			}
+			var itemSockets = '';
+			if(typeof(charDataObj[itemObjName].sockets) !== 'undefined') {
+				itemSockets = charDataObj[itemObjName].sockets;
 			}
 			
 			//We're going to just check each attribute and look for our keyword.
@@ -251,6 +256,27 @@ function getSearchResults(criteriaArr){
 					}
 					
 					keywordStringToSearch = keywordStringToSearch + statsStringsToSearch;
+				}else if(itemAttr == 'socketed') {
+					//Show a list of just the socketed item names.
+					if(itemSockets) {
+						var socketsHtml = '<strong>Sockets:</strong> '+itemSockets+'<br />';
+					}else{
+						var socketsHtml = ''
+					}
+					var soscketsStringsToSearch = '';
+					for (const socketNum in itemObj[itemAttr])  {
+						if(typeof(socketsHtml+itemObj[itemAttr][socketNum].name) !== 'undefined') {
+							socketsHtml = socketsHtml+itemObj[itemAttr][socketNum].name+'<br />';
+							socketsHtml = socketsHtml.replace(' BAS','');
+							socketsHtml = socketsHtml.replace(' EXC','');
+							socketsHtml = socketsHtml.replace(' ELI','');
+							soscketsStringsToSearch = soscketsStringsToSearch + itemObj[itemAttr][socketNum].name;
+						}else{
+							socketsHtml = socketsHtml+itemObj[itemAttr][socketNum].type+'<br />';
+							soscketsStringsToSearch = soscketsStringsToSearch + itemObj[itemAttr][socketNum].type;
+						}
+					}
+					keywordStringToSearch = keywordStringToSearch + soscketsStringsToSearch;
 				}else{
 					keywordStringToSearch = keywordStringToSearch + "" + itemObj[itemAttr];
 				}
@@ -309,7 +335,7 @@ function getSearchResults(criteriaArr){
 				var charName = fileName.substring(fileName.indexOf('_')+1)
 				charName = charName.replace('.txt','');
 				
-				searchResults.push({'accountName':accountName,'charName':charName,'itemObj':itemObj,'itemName':itemName,'itemType':itemType,'itemLevel':itemLevel,'itemStatsString':itemStatsString,'qualityStr':qualityStr});
+				searchResults.push({'accountName':accountName,'charName':charName,'itemObj':itemObj,'itemName':itemName,'itemType':itemType,'itemLevel':itemLevel,'itemStatsString':itemStatsString,'qualityStr':qualityStr,'socketsHtml':socketsHtml,});
 			}
 			criteriaresults = [];
 		}
